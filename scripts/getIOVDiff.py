@@ -33,7 +33,6 @@ def main():
     (opts, args) = parser.parse_args()
 
     out = getCommandOutput("conddb diff "+opts.refGT+" "+opts.tarGT) 
-    #74X_dataRun2_HLTValidation_Queue GR_H_V58C")
     lines = out.split('\n')
     listOfRefTags = []
     listOfTarTags = []
@@ -49,13 +48,9 @@ def main():
     #print listOfRefTags
     #print listOfTarTags
 
-    # for entry in listOfRefTags:
     for i in range(len(listOfRefTags)):
          out2 = getCommandOutput("conddb diff "+listOfRefTags[i]+" "+listOfTarTags[i]+" -s")
-         #print out2
          rawIOVs = out2.split('\n')
-         #print rawIOVs[0]
-         #print rawIOVs[1]
          for rawIOV in rawIOVs[2:]:
              IOV = rawIOV.split(" ")
              filteredIOVs = filter(None,IOV) # fastest
@@ -66,25 +61,10 @@ def main():
                     e_run = 9999999
                 else:
                     e_run = int(filteredIOVs[1].replace(')',''))
-                #print b_run
                 if (b_run < int(opts.testRunNumber) and e_run > int(opts.testRunNumber)):
-                #if (b_run < 251883 and e_run > 251883):
                     print rawIOVs[0]
                     print rawIOVs[1]
                     print b_run,"-",e_run,filteredIOVs[2],filteredIOVs[3]
-
-    #fout=open("diffs.txt",'w+r')
-    #fout.write(out)
-
-    #print out
-    #for line in fout:
-	# split the line into a list of column values
-	#columns = line.split(' ')
-	#print line
-	# clean any whitespace off the items
-	#columns = [col.strip() for col in columns]
-
-
 
 if __name__ == "__main__":        
     main()
