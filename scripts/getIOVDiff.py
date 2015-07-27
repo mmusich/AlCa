@@ -93,7 +93,7 @@ def main():
                     refStripDateTime = datetime.datetime.strptime(rawInfoRefSplit[3].replace('-',''), '%Y%m%d').date()
                     tarStripDateTime = datetime.datetime.strptime(rawInfoTarSplit[3].replace('-',''), '%Y%m%d').date()
 
-                    if( refStripDateTime < datetime.date(2015,1,6) ):
+                    if( refStripDateTime <= datetime.date(2015,1,6) ):
                         print FAIL + rawInfoRefSplit[0]," ",rawInfoRefSplit[1],rawInfoRefSplit[3],rawInfoRefSplit[4] + ENDC
                     else:
                         print rawInfoRefSplit[0]," ",rawInfoRefSplit[1],rawInfoRefSplit[3],rawInfoRefSplit[4]
