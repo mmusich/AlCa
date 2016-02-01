@@ -8,7 +8,7 @@ __author__ = 'Marco Musich'
 __copyright__ = 'Copyright 2015, CERN CMS'
 __credits__ = ['Giacomo Govi', 'Salvatore Di Guida', 'Miguel Ojeda', 'Andreas Pfeiffer']
 __license__ = 'Unknown'
-__maintainer__ = 'Andreas Pfeiffer'
+__maintainer__ = 'Marco Musich'
 __email__ = 'marco.musich@cern.ch'
 __version__ = 1
 
@@ -130,6 +130,7 @@ def main():
                 'RunII_Asymptotic_scenario' : ('run2_mc',"Run2 Asymptotic Simulation"),
                 'RunII_Startup_scenario' : ('run2_mc_50ns',"Run2 Startup Simulation"),
                 'RunII_Heavy_Ions_scenario' : ('run2_mc_hi',"Run2 Heavy Ions Simulation"),
+                'RunII_CRAFT_scenario' : ('run2_mc_cosmics',"Run2 CRAFT cosmics Simulation"),
                 'RunI_HLT_processing' : ('run1_hlt',"Run1 data HLT processing"),
                 'RunI_Offline_processing': ('run1_data',"Run1 data offline processing"),
                 'RunII_HLT_processing' : ('run2_hlt',"Run2 data HLT processing"),
@@ -157,6 +158,7 @@ def main():
             fout1=open("GitHub_"+theRelease+".txt",'w')
             fout2=open("Twiki_"+theRelease+".txt",'w')
 
+        fout1.write("# Summary of changes in Global Tags \n \n")    
         fout2.write("---++++ "+theRelease+"\n")
         fout2.write("[[https://github.com/cms-sw/cmssw/blob/"+theRelease+"/Configuration/AlCa/python/autoCond.py][Configuration/AlCa/python/autoCond.py]] \n\n")
         
@@ -164,78 +166,83 @@ def main():
         # Run1 Simulation
         ###############################
         conditions1 = config.getResultingSection("RunI_Simulation")
-        fout1.write("## RunI simulation \n \n")
-        for key in conditions1:
-            if("scenario" in key):
-                params = conditions1[key].split(',')
-
-                fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
-                fout1.write("      *\n \n")
-
-                fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
-                fout2.write("      *\n \n")
+        if(conditions1):
+            fout1.write("## RunI simulation \n \n")
+            for key in conditions1:
+                if("scenario" in key):
+                    params = conditions1[key].split(',')
+                    
+                    fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
+                    fout1.write("      *\n \n")
+                    
+                    fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
+                    fout2.write("      *\n \n")
 
         ###############################
         # Run2 Simulation
         ###############################
         conditions2 = config.getResultingSection("RunII_Simulation")
-        fout1.write("## RunII simulation \n \n")
-        for key in conditions2:
-            if("scenario" in key):
-                params = conditions2[key].split(',')
-
-                fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
-                fout1.write("      *\n \n")
-
-                fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
-                fout2.write("      *\n \n")
+        if(conditions2):
+            fout1.write("## RunII simulation \n \n")
+            for key in conditions2:
+                if("scenario" in key):
+                    params = conditions2[key].split(',')
+                    
+                    fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
+                    fout1.write("      *\n \n")
+                    
+                    fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
+                    fout2.write("      *\n \n")
                 
         ###############################
         # Data Run1 
         ###############################
         conditions3 = config.getResultingSection("RunI_Data")
-        fout1.write( "## RunI data \n \n")
-        for key in conditions3:
-            if("processing" in key):
-                params = conditions3[key].split(',')
-
-                fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
-                fout1.write("      *\n \n")
-                
-                fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
-                fout2.write("      *\n \n")
+        if(conditions3):
+            fout1.write( "## RunI data \n \n")
+            for key in conditions3:
+                if("processing" in key):
+                    params = conditions3[key].split(',')
+                    
+                    fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
+                    fout1.write("      *\n \n")
+                    
+                    fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
+                    fout2.write("      *\n \n")
 
         ###############################
         # Data Run2
         ###############################
         conditions4 = config.getResultingSection("RunII_Data")
-        fout1.write("## RunII data \n \n")
-        for key in conditions4:
-            if("processing" in key):
-                params = conditions4[key].split(',')
+        if(conditions4):
+            fout1.write("## RunII data \n \n")
+            for key in conditions4:
+                if("processing" in key):
+                    params = conditions4[key].split(',')
+                    
+                    fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
+                    fout1.write("      *\n \n")
 
-                fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
-                fout1.write("      *\n \n")
-
-                fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
-                fout2.write("      *\n \n")
+                    fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
+                    fout2.write("      *\n \n")
                
         ###############################
         # Upgrade
         ###############################
         conditions5 = config.getResultingSection("Upgrade")
-        fout1.write("## Upgrade \n \n")
-        for key in conditions5:
-            if("scenario" in key):
-                params = conditions5[key].split(',')
+        if(conditions5):
+            fout1.write("## Upgrade \n \n")
+            for key in conditions5:
+                if("scenario" in key):
+                    params = conditions5[key].split(',')
+                    
+                    fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
+                    fout1.write("      *\n \n")
+                    
+                    fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
+                    fout2.write("      *\n \n")
 
-                fout1.write("   * **"+key.replace("_"," ")+"** : ["+params[0]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+") as ["+params[1]+"](https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[1]+") with the following [changes](https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"): \n")
-                fout1.write("      *\n \n")
-
-                fout2.write("   * =\'"+dict[key][0]+"\'= ("+dict[key][1]+") : [[https://cms-conddb.cern.ch/cmsDbBrowser/list/Prod/gts/"+params[0]+"]["+params[0]+"]],[[https://cms-conddb.cern.ch/cmsDbBrowser/diff/Prod/gts/"+params[0]+"/"+params[1]+"][diff with previous]]: \n")
-                fout2.write("      *\n \n")
-
-        fout2.write("[[https://github.com/cms-sw/cmssw/pull/"+thePR+"][Pull Request]]")
+                    fout2.write("[[https://github.com/cms-sw/cmssw/pull/"+thePR+"][Pull Request]]")
 
 if __name__ == "__main__":        
     main()
