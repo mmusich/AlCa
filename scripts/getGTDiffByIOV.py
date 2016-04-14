@@ -36,12 +36,29 @@ def getCommandOutput(command):
 def main():            
 ### MAIN LOOP ###
 
+    if "CMSSW_RELEASE_BASE" in os.environ:
+        print "=================================================="
+        print "This script is powered by cmsQueryingMiniFramework"
+        print "served to you by",os.getenv('CMSSW_RELEASE_BASE')
+        print "==================================================\n\n\n"
+    else: 
+        print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        print "+ This tool needs cmsQueryingMiniFramework (https://gitlab.cern.ch/jdawes/cmsQueryingMiniFramework)"
+        print "+ Easiest way to get it is via CMSSW (>800) is"
+        print "+ cmsrel CMSSW_8_0_4"
+        print "+ cd CMSSW_8_0_4/src"
+        print "+ cmsenv"
+        print "+ cd -"
+        print "and then you can proceed"
+        print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        sys.exit(1)
+
     desc="""This is a description of %prog."""
     parser = OptionParser(description=desc,version='%prog version 0.1')
     parser.add_option('-r','--run', help='test run number', dest='testRunNumber', action='store', default='251883')
     parser.add_option('-R','--ReferenceGT',help='Reference Global Tag', dest='refGT', action='store', default='GR_H_V58C')
-    parser.add_option('-L','--last',help='compares the very last IOV' , dest='lastIOV',action='store_true', default=False)
     parser.add_option('-T','--TargetGT'   ,help='Target Global Tag'   , dest='tarGT', action='store', default='74X_dataRun2_HLTValidation_Queue')
+    parser.add_option('-L','--last',help='compares the very last IOV' , dest='lastIOV',action='store_true', default=False)
     (opts, args) = parser.parse_args()
 
     import CondCore.Utilities.CondDBFW.shell as shell
@@ -64,8 +81,6 @@ def main():
 
     print "| *Record* | *"+opts.refGT+"* | *"+opts.tarGT+"* |"
        
-    
-
     for Rcd in sorted(differentTags):
 
         #print Rcd,differentTags[Rcd][2]," 1:",differentTags[Rcd][0]," 2:",differentTags[Rcd][1]
