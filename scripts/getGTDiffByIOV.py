@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+'''Script that checks for differences at a given run number (or at the last IOV) between two Global Tags
+'''
+
+__author__ = 'Marco Musich'
+__copyright__ = 'Copyright 2016, CERN CMS'
+__credits__ = ['Giacomo Govi', 'Salvatore Di Guida','Joshua Dawes']
+__license__ = 'Unknown'
+__maintainer__ = 'Marco Musich'
+__email__ = 'marco.musich@cern.ch'
+__version__ = 1
 
 import datetime,time
 import os,sys
@@ -75,7 +85,7 @@ def main():
 
             if(hash_lastRefTagIOV!=hash_lastTagTagIOV):
                 print "| ="+Rcd+"= ("+differentTags[Rcd][2]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
-                print "|^|"+hash_lastRefTagIOV+" ("+time_lastRefTagIOV+") | "+hash_lastTagTagIOV+" ("+time_lastTagTagIOV+") |"
+                print "|^|"+hash_lastRefTagIOV+" <br> ("+time_lastRefTagIOV+") | "+hash_lastTagTagIOV+" <br> ("+time_lastTagTagIOV+") |"
 
         else:    
 
