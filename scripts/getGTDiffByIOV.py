@@ -79,7 +79,7 @@ def main():
                 if RefTag != element2["tag_name"]:
                     differentTags[RefRecord]=(RefTag,element2["tag_name"],RefLabel)
 
-    print "| *Record* | *"+opts.refGT+"* | *"+opts.tarGT+"* |"
+    print "| *Record* | *"+opts.refGT+"* | *"+opts.tarGT+"* | Remarks |"
        
     for Rcd in sorted(differentTags):
 
@@ -92,15 +92,34 @@ def main():
 
             #print "COMPARING the LAST IOV"
 
-            hash_lastRefTagIOV = refTagIOVs[-1]["payload_hash"]
-            hash_lastTagTagIOV = tarTagIOVs[-1]["payload_hash"]
+            lastSinceRef=-1
+            lastSinceTar=-1
 
-            time_lastRefTagIOV = str(refTagIOVs[-1]["insertion_time"])
-            time_lastTagTagIOV = str(tarTagIOVs[-1]["insertion_time"])
+            for i in refTagIOVs:
+                if (i["since"]>lastSinceRef):
+                    lastSinceRef = i["since"]
+                    hash_lastRefTagIOV = i["payload_hash"]
+                    time_lastRefTagIOV = str(i["insertion_time"])
 
-            if(hash_lastRefTagIOV!=hash_lastTagTagIOV):
-                print "| ="+Rcd+"= ("+differentTags[Rcd][2]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
-                print "|^|"+hash_lastRefTagIOV+" <br> ("+time_lastRefTagIOV+") | "+hash_lastTagTagIOV+" <br> ("+time_lastTagTagIOV+") |"
+            for i in tarTagIOVs:
+                if (i["since"]>lastSinceTar):
+                    lastSinceTar = i["since"]
+                    hash_lastTarTagIOV = i["payload_hash"]
+                    time_lastTarTagIOV = str(i["insertion_time"])
+
+            #print Rcd, lastSinceRef, hash_lastRefTagIOV , time_lastRefTagIOV
+            #print Rcd, lastSinceTar, hash_lastTarTagIOV , time_lastTarTagIOV
+
+
+                    #      hash_lastRefTagIOV = refTagIOVs[-1]["payload_hash"]
+                    #      hash_lastTagTagIOV = tarTagIOVs[-1]["payload_hash"]
+                    
+                    #      time_lastRefTagIOV = str(refTagIOVs[-1]["insertion_time"])
+                    #      time_lastTagTagIOV = str(tarTagIOVs[-1]["insertion_time"])
+
+            if(hash_lastRefTagIOV!=hash_lastTarTagIOV):
+                print "| ="+Rcd+"= ("+differentTags[Rcd][2]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== | | "
+                print "|^|"+hash_lastRefTagIOV+" <br> ("+time_lastRefTagIOV+") "+ str(lastSinceRef) +" | "+hash_lastTarTagIOV+" <br> ("+time_lastTarTagIOV+") " + str(lastSinceTar)+" | ^|"
 
         else:    
 
