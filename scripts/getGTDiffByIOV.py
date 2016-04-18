@@ -37,10 +37,11 @@ def main():
 ### MAIN LOOP ###
 
     if "CMSSW_RELEASE_BASE" in os.environ:
+        print "\n"
         print "=================================================="
         print "This script is powered by cmsQueryingMiniFramework"
         print "served to you by",os.getenv('CMSSW_RELEASE_BASE')
-        print "==================================================\n\n\n"
+        print "==================================================\n"
     else: 
         print "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         print "+ This tool needs cmsQueryingMiniFramework (https://gitlab.cern.ch/jdawes/cmsQueryingMiniFramework)"
@@ -77,7 +78,7 @@ def main():
         for element2 in myGTtar:
             if (RefRecord == element2["record"] and RefLabel==element2["label"]): 
                 if RefTag != element2["tag_name"]:
-                    differentTags[RefRecord]=(RefTag,element2["tag_name"],RefLabel)
+                    differentTags[(RefRecord,RefLabel)]=(RefTag,element2["tag_name"])
 
     print "| *Record* | *"+opts.refGT+"* | *"+opts.tarGT+"* | Remarks |"
        
@@ -118,7 +119,7 @@ def main():
                     #      time_lastTagTagIOV = str(tarTagIOVs[-1]["insertion_time"])
 
             if(hash_lastRefTagIOV!=hash_lastTarTagIOV):
-                print "| ="+Rcd+"= ("+differentTags[Rcd][2]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== | | "
+                print "| ="+Rcd[0]+"= ("+Rcd[1]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== | | "
                 print "|^|"+hash_lastRefTagIOV+" <br> ("+time_lastRefTagIOV+") "+ str(lastSinceRef) +" | "+hash_lastTarTagIOV+" <br> ("+time_lastTarTagIOV+") " + str(lastSinceTar)+" | ^|"
 
         else:    
@@ -145,7 +146,7 @@ def main():
                     theTarTime=str(IOV["insertion_time"])
         
                     if(theRefPayload!=theTarPayload):
-                        print "| ="+Rcd+"= ("+differentTags[Rcd][2]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
+                        print "| ="+Rcd+"= ("+Rcd[1]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
                         print "|^|"+theRefPayload+" ("+theRefTime+") | "+theTarPayload+" ("+theTarTime+") |"
                        
 
