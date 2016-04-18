@@ -108,16 +108,6 @@ def main():
                     hash_lastTarTagIOV = i["payload_hash"]
                     time_lastTarTagIOV = str(i["insertion_time"])
 
-            #print Rcd, lastSinceRef, hash_lastRefTagIOV , time_lastRefTagIOV
-            #print Rcd, lastSinceTar, hash_lastTarTagIOV , time_lastTarTagIOV
-
-
-                    #      hash_lastRefTagIOV = refTagIOVs[-1]["payload_hash"]
-                    #      hash_lastTagTagIOV = tarTagIOVs[-1]["payload_hash"]
-                    
-                    #      time_lastRefTagIOV = str(refTagIOVs[-1]["insertion_time"])
-                    #      time_lastTagTagIOV = str(tarTagIOVs[-1]["insertion_time"])
-
             if(hash_lastRefTagIOV!=hash_lastTarTagIOV):
                 print "| ="+Rcd[0]+"= ("+Rcd[1]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== | | "
                 print "|^|"+hash_lastRefTagIOV+" <br> ("+time_lastRefTagIOV+") "+ str(lastSinceRef) +" | "+hash_lastTarTagIOV+" <br> ("+time_lastTarTagIOV+") " + str(lastSinceTar)+" | ^|"
@@ -146,7 +136,7 @@ def main():
                     theTarTime=str(IOV["insertion_time"])
         
                     if(theRefPayload!=theTarPayload):
-                        print "| ="+Rcd+"= ("+Rcd[1]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
+                        print "| ="+Rcd[0]+"= ("+Rcd[1]+") | =="+differentTags[Rcd][0]+"==  | =="+differentTags[Rcd][1]+"== |"
                         print "|^|"+theRefPayload+" ("+theRefTime+") | "+theTarPayload+" ("+theTarTime+") |"
                        
 
