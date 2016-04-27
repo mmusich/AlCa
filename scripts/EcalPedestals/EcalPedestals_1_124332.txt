@@ -1,0 +1,9 @@
+{
+    "destinationDatabase": "oracle://cms_orcoff_prep/CMS_CONDITIONS", 
+    "destinationTags": {
+        "EcalPedestals_express": {}
+    },
+    "inputTag": "EcalPedestals_express", 
+    "since": null, 
+    "userText": "Copying the Ecal pedestals for HLT tag into the express one"
+}
