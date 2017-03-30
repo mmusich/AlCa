@@ -1,0 +1,47 @@
+### the problem was to create a bad components payload using version
+### 1.57 of boost because of
+### https://indico.cern.ch/event/616398/contributions/2487959/attachments/1430516/2197244/AlCaDB_News_20.03.2017.pdf
+### (slide n.7)
+
+
+cmsrel CMSSW_9_0_0_pre5
+cd CMSSW_9_0_0_pre5/src/
+scram tool list | grep boost 
+### ---> this will give the desired version
+git cms-addpkg Configuration/DataProcessing
+cd Configuration/DataProcessing/test/
+### we need this to define the era
+wget --no-check-certificate https://raw.githubusercontent.com/cms-sw/cmssw/CMSSW_9_0_X/Configuration/DataProcessing/test/cosmicsEra_Run2_2017_t.py
+cd ../python/Impl/
+wget https://raw.githubusercontent.com/cms-sw/cmssw/CMSSW_9_0_X/Configuration/DataProcessing/python/Impl/cosmicsEra_Run2_2017.py
+scramv1 b -j 8
+### ---> create the harvester file
+python RunAlcaHarvesting.py --scenario cosmicsEra_Run2_2017 --global-tag 90X_dataRun2_Express_v2 --lfn /store/express/Commissioning2017/StreamExpressCosmics/ALCAPROMPT/PromptCalibProdSiStrip-Express-v1/000/290/198/00000/FC611EE9-3913-E711-96A6-02163E01A2C0.root --dataset=/StreamExpressCosmics/Commissioning2017-PromptCalibProdSiStrip-Express-v1/ALCAPROMPT
+### ---> get the file list
+voms-proxy-init
+das_client.py --limit=0 --query='file dataset=/StreamExpressCosmics/Commissioning2017-PromptCalibProdSiStrip-Express-v1/ALCAPROMPT run=290198'
+
+### ----> get the checker from Suchandra                   
+wget https://twiki.cern.ch/twiki/pub/CMS/SiStripBadComponentForMC/create_BadChannelForMC_Mar01_2017_cfg.py.txt
+mv create_BadChannelForMC_Mar01_2017_cfg.py.txt readBadChannels_cfg.py
+
+### run the producer
+cmsRun -j FrameworkJobReport.xml RunAlcaHarvestingCfg.py
+
+mkdir $HOME/public/forSuchandra
+cp promptCalibConditions.db $HOME/public/forSuchandra
+conddb list 90X_dataRun2_Prompt_v2 | grep SiStripBadChannel_FromOfflineCalibration_GR10_v1_prompt
+cp -pr /afs/cern.ch/work/m/musich/public/AlCAOperations/CMSSW_9_0_0/src/CondTools/SiStrip/test/SiStripBadComponents_cfg.py .
+sqlite3 promptCalibConditions.db
+mv BadComponents_Mar29_2017.log BadComponents_Mar29_2017_updated.log
+diff BadComponents_Mar29_2017.log BadComponents_Mar29_2017_updated.log
+diff BadComponents_Mar29_2017.log /afs/cern.ch/work/m/musich/public/AlCAOperations/CMSSW_9_0_0/src/CondTools/SiStrip/test/BadComponents_Mar29_2017.log
+diff BadComponents_Mar29_2017_updated.log /afs/cern.ch/work/m/musich/public/AlCAOperations/CMSSW_9_0_0/src/CondTools/SiStrip/test/BadComponents_Mar29_2017.log
+cd ..
+ls
+cd Configuration/DataProcessing/test/
+emacs -nw SiStripBadComponents_cfg.py
+cmsenv
+cmsRun SiStripBadComponents_cfg.py
+cmsenv
+cmsRun SiStripBadComponents_cfg.py
