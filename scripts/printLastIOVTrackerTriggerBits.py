@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+'''
+Script to retrieve the last IOV of the Tracker Trigger Bits in GT
+Usage:
+
+- for Express Global Tag:
+python3 printLastIOVTrackerTriggerBits.py --isExpress True
+
+- for Prompt Global Tag:
+python3 printLastIOVTrackerTriggerBits.py --isExpress True
+'''
 
 from datetime import datetime
 #from prettytable import PrettyTable
