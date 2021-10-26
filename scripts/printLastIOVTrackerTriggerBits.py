@@ -12,7 +12,6 @@ python3 printLastIOVTrackerTriggerBits.py --isExpress True
 
 from datetime import datetime
 #from prettytable import PrettyTable
-import CondCore.Utilities.conddblib as conddb
 #import ConfigParser
 import calendar
 import optparse
@@ -106,6 +105,24 @@ def parseXML(xmlstring):
 if __name__ == "__main__":
 ##############################################
 
+    if "CMSSW_RELEASE_BASE" in os.environ:
+        print("\n")
+        print("==================================================")
+        print("This script is powered by conddblib")
+        print("served to you by",os.getenv('CMSSW_RELEASE_BASE'))
+        print("==================================================\n")
+    else: 
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("+ This tool needs CMSSW libraries")
+        print("+ Easiest way to get it is via CMSSW is")
+        print("+ cmsrel CMSSW_X_Y_Z  #get your favorite")
+        print("+ cd CMSSW_X_Y_Z/src")
+        print("+ cmsenv")
+        print("+ cd -")
+        print("and then you can proceed")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        sys.exit(1)
+
     parser = optparse.OptionParser(usage =
                                    'Usage: %prog [options] <file> [<file> ...]\n')
 
@@ -124,7 +141,7 @@ if __name__ == "__main__":
     ####################################
     # Set up connections with the DB
     ####################################
-
+    import CondCore.Utilities.conddblib as conddb
     con = conddb.connect(url = conddb.make_url("pro"))
     session = con.session()
     IOV     = session.get_dbtype(conddb.IOV)
